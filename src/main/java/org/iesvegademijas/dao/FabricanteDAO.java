@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.iesvegademijas.model.Fabricante;
+import org.iesvegademijas.model.FabricanteDTO;
 
 public interface FabricanteDAO {
 		
@@ -15,5 +16,10 @@ public interface FabricanteDAO {
 	public void update(Fabricante fabricante);
 	
 	public void delete(int id);
+	
+	public Optional<Integer> getCountProductos(int id);
+	
+	public List<FabricanteDTO> getAllDTOPlusCountProductos();
+	public List<FabricanteDTO> ordenarFabricanteDTO(String orden, String modo);
 
 }

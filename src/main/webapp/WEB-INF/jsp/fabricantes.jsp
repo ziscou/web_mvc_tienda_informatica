@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="org.iesvegademijas.model.FabricanteDTO"%>
 <%@page import="org.iesvegademijas.model.Fabricante"%>
 <%@page import="java.util.List"%>
 
@@ -36,12 +37,27 @@
 				
 			</div>
 		</div>
+		<form action="/tienda_informatica/fabricantes" >
+			<label style="float: left; width: 20%" >Ordenar por:</label>
+			<select name="orden" style="float: left; width: 20%">
+				<option value="ordCod">Codigo</option>
+				<option value="ordNom">Nombre</option>
+			</select>
+			
+			<label style="float: left; width: 20%; margin-left: 4%" >Modo:</label>
+			<select name="modo" style="float: left; width: 20%">
+				<option value="modAsc">asc</option>
+				<option value="modDesc">desc</option>
+			</select>
+			<input type="submit" value="Ordenar" style="float: left; width: 12%;margin-left: 4%"/>
+		</form>
 		<div class="clearfix">
 			<hr/>
 		</div>
 		<div class="clearfix">
-			<div style="float: left;width: 33%">Código</div>
-			<div style="float: left;width: 33%">Nombre</div>
+			<div style="float: left;width: 10%">Código</div>
+			<div style="float: left;width: 30%">Nombre</div>
+			<div style="float: left;width: 20%">Nº Productos</div>
 			<div style="float: none;width: auto;overflow: hidden;">Acción</div>
 		</div>
 		<div class="clearfix">
@@ -49,14 +65,15 @@
 		</div>
 	<% 
         if (request.getAttribute("listaFabricantes") != null) {
-            List<Fabricante> listaFabricante = (List<Fabricante>)request.getAttribute("listaFabricantes");
+            List<FabricanteDTO> listaFabricante = (List<FabricanteDTO>)request.getAttribute("listaFabricantes");
             
-            for (Fabricante fabricante : listaFabricante) {
+            for (FabricanteDTO fabricante : listaFabricante) {
     %>
 
 		<div style="margin-top: 6px;" class="clearfix">
-			<div style="float: left;width: 33%"><%= fabricante.getCodigo()%></div>
-			<div style="float: left;width: 33%"><%= fabricante.getNombre()%></div>
+			<div style="float: left;width: 10%"><%= fabricante.getCodigo()%></div>
+			<div style="float: left;width: 30%"><%= fabricante.getNombre()%></div>
+			<div style="float: left;width: 20%"><%= fabricante.getNumProd()%></div>
 			<div style="float: none;width: auto;overflow: hidden;">
 				<form action="/tienda_informatica/fabricantes/<%= fabricante.getCodigo()%>" style="display: inline;">
     				<input type="submit" value="Ver Detalle" />

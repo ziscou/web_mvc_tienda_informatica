@@ -2,6 +2,10 @@ package org.iesvegademijas.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+
+import static java.util.stream.Collectors.*;
+import static java.util.Comparator.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.iesvegademijas.dao.FabricanteDAO;
 import org.iesvegademijas.dao.FabricanteDAOImpl;
 import org.iesvegademijas.model.Fabricante;
+import org.iesvegademijas.model.FabricanteDTO;
+
+
 
 public class FabricantesServlet extends HttpServlet {
 
@@ -40,7 +47,32 @@ public class FabricantesServlet extends HttpServlet {
 			//	/fabricantes/
 			//	/fabricantes
 			
-			request.setAttribute("listaFabricantes", fabDAO.getAll());		
+			var listaFabDTO = fabDAO.getAll().stream().map(f->{
+				FabricanteDTO fd = new FabricanteDTO(f);
+				
+				fd.setNumProd(fabDAO.getCountProductos(f.getCodigo()).get());
+				
+				return fd;
+
+				
+			}).collect(toList());
+			
+			List<FabricanteDTO> listaOrd = null;
+			if (request.getParameter("orden") != null) {
+				if(request.getParameter("orden").equals("ordCod") && request.getParameter("modo").equals("modAsc")) {
+					listaOrd= listaFabDTO.stream().sorted(comparing(FabricanteDTO::getCodigo)).collect(toList());
+				} else if(request.getParameter("orden").equals("ordCod") && request.getParameter("modo").equals("modDesc")) {
+					listaOrd= listaFabDTO.stream().sorted(comparing(FabricanteDTO::getCodigo).reversed()).collect(toList());
+				} else if(request.getParameter("orden").equals("ordNom") && request.getParameter("modo").equals("modAsc")) {
+					listaOrd= listaFabDTO.stream().sorted(comparing(FabricanteDTO::getNombre)).collect(toList());
+				} else if(request.getParameter("orden").equals("ordNom") && request.getParameter("modo").equals("modDesc")) {
+					listaOrd= listaFabDTO.stream().sorted(comparing(FabricanteDTO::getNombre).reversed()).collect(toList());
+				}
+			} else {
+				listaOrd= listaFabDTO.stream().sorted(comparing(FabricanteDTO::getCodigo)).collect(toList());
+			}
+			fabDAO.ordenarFabricanteDTO(request.getParameter("orden"),request.getParameter("modo")).forEach(System.out::println);
+			request.setAttribute("listaFabricantes", fabDAO.ordenarFabricanteDTO(request.getParameter("orden"),request.getParameter("modo")));		
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes.jsp");
 			        		       
 		} else {
