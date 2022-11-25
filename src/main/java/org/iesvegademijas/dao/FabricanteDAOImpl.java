@@ -119,7 +119,6 @@ public class FabricanteDAOImpl extends AbstractDAOImpl implements FabricanteDAO{
         	
         	if (rs.next()) {
         		Fabricante fab = new Fabricante();
-        		idx = 1;
         		fab.setCodigo(rs.getInt(idx++));
         		fab.setNombre(rs.getString(idx));
         		
@@ -279,7 +278,7 @@ public class FabricanteDAOImpl extends AbstractDAOImpl implements FabricanteDAO{
 	@Override
 	public List<FabricanteDTO> ordenarFabricanteDTO(String orden, String modo) {
 		Connection conn = null;
-		PreparedStatement ps = null;
+		Statement s = null;
         ResultSet rs = null;
  
         
@@ -287,39 +286,36 @@ public class FabricanteDAOImpl extends AbstractDAOImpl implements FabricanteDAO{
         
         try {
         	conn = connectDB();
-
-        	String.format("select F.*,count(P.codigo) from fabricante F left outer join producto P on F.codigo = P.codigo_fabricante group by F.codigo order by %s %s");
         	
-        	ps = conn.prepareStatement("select F.*,count(P.codigo) from fabricante F left outer join producto P on F.codigo = P.codigo_fabricante group by F.codigo order by ? ?");
-            		
-        	if (orden != null) {
+        	s = conn.createStatement();
+
+        	String format = "select F.*,count(P.codigo) from fabricante F left outer join producto P on F.codigo = P.codigo_fabricante group by F.codigo order by %s %s";
+        	
+        	if (orden != null && modo != null) {
 				if(orden.equals("ordCod") && modo.equals("modAsc")) {
-					int idx =  1;
 					
-		        	ps.setString(idx++, "F.codigo");
-		        	ps.setString(idx, "asc");
+					format = String.format(format, "F.codigo", "asc");
+		        	
 				} else if(orden.equals("ordCod") && modo.equals("modDesc")) {
-					int idx =  1;
-		        	ps.setString(idx++, "F.codigo");
-		        	ps.setString(idx, "desc");
+					
+					format = String.format(format, "F.codigo", "desc");
+
 				} else if(orden.equals("ordNom") && modo.equals("modAsc")) {
-					int idx =  1;
-		        	ps.setString(idx++, "F.nombre");
-		        	ps.setString(idx, "asc");
+					
+					format = String.format(format, "F.nombre", "asc");
+					
 				} else if(orden.equals("ordNom") && modo.equals("modDesc")) {
-					int idx =  1;
-		        	ps.setString(idx++, "F.nombre");
-		        	ps.setString(idx, "desc");
+					
+					format = String.format(format, "F.nombre", "desc");
 				}
 			} else {
-				int idx =  1;
-	        	ps.setString(idx++, "F.codigo");
-	        	ps.setString(idx++, "asc");
+
+				format = String.format(format, "F.codigo", "asc");
 	        	
 			}
         	
         	
-        	rs = ps.executeQuery();
+        	rs = s.executeQuery(format);
             while (rs.next()) {
             	FabricanteDTO fab = new FabricanteDTO();
             	int idx = 1;
@@ -334,9 +330,10 @@ public class FabricanteDAOImpl extends AbstractDAOImpl implements FabricanteDAO{
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {
-            closeDb(conn, ps, rs);
+            closeDb(conn, s, rs);
         }
         return listFab;
 	}
 
+	
 }

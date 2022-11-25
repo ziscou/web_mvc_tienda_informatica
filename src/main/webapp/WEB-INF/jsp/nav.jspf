@@ -1,0 +1,9 @@
+	<nav class="menu">
+		<a href="/tienda_informatica/">HOME</a>
+		<a href="/tienda_informatica/fabricantes">Frabricantes</a>
+		<a href="/tienda_informatica/productos">Producto</a>
+		<a href="/tienda_informatica/usuarios">Usuario</a>
+		<div class="menu-log">
+			<a href="/tienda_informatica/usuarios/login">LOGIN</a>
+		</div>
+	</nav>

@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="org.iesvegademijas.model.Producto"%>
+<%@page import="org.iesvegademijas.model.Usuario"%>
 <%@page import="java.util.List"%>
 
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Productos</title>
+		<title>Usuarios</title>
 		<style>
 			.clearfix::after {
 				content: "";
@@ -24,13 +24,13 @@
 			<div id="contenedora" style="float:none; margin: 0 auto;width: 900px;" >
 				<div class="clearfix">
 					<div style="float: left; width: 50%">
-						<h1>Productos</h1>
+						<h1>Usuarios</h1>
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
 						
 						<div style="position: absolute; left: 39%; top : 39%;">
 							
-		 						<form action="/tienda_informatica/productos/crear"> 
+		 						<form action="/tienda_informatica/usuarios/crear"> 
 									<input type="submit" value="Crear"> 
 								</form> 
 							</div>
@@ -42,7 +42,7 @@
 				</div>
 				<div class="clearfix">
 					<div style="float: left;width: auto;overflow: hidden;position: relative;">
-						<form action="/tienda_informatica/productos">
+						<form action="/tienda_informatica/usuarios">
 							<input name="filtro" placeholder="buscador">
 							<button>Buscar</button>
 						</form>
@@ -54,33 +54,33 @@
 				<div class="clearfix">
 					<div style="float: left;width: 10%">Código</div>
 					<div style="float: left;width: 30%">Nombre</div>
-					<div style="float: left;width: 10%">Precio</div>
+					<div style="float: left;width: 10%">Rol</div>
 					<div style="float: none;width: auto;overflow: hidden;">Acción</div>
 				</div>
 				<div class="clearfix">
 					<hr/>
 				</div>
 			<% 
-		        if (request.getAttribute("listaProductos") != null) {
-		            List<Producto> listaProductos = (List<Producto>)request.getAttribute("listaProductos");
+		        if (request.getAttribute("listaUsuarios") != null) {
+		            List<Usuario> listaUsuarios = (List<Usuario>)request.getAttribute("listaUsuarios");
 		            
-		            for (Producto producto : listaProductos) {
+		            for (Usuario usuario : listaUsuarios) {
 		    %>
 		
 				<div style="margin-top: 6px;" class="clearfix">
-					<div style="float: left;width: 10%"><%= producto.getCodigo()%></div>
-					<div style="float: left;width: 30%"><%= producto.getNombre()%></div>
-					<div style="float: left;width: 10%"><%= producto.getPrecio()%></div>
+					<div style="float: left;width: 10%"><%= usuario.getId()%></div>
+					<div style="float: left;width: 30%"><%= usuario.getUser()%></div>
+					<div style="float: left;width: 10%"><%= usuario.getRol()%></div>
 					<div style="float: none;width: auto;overflow: hidden;">
-						<form action="/tienda_informatica/productos/<%= producto.getCodigo()%>" style="display: inline;">
+						<form action="/tienda_informatica/usuarios/<%= usuario.getId()%>" style="display: inline;">
 		    				<input type="submit" value="Ver Detalle" />
 						</form>
-						<form action="/tienda_informatica/productos/editar/<%= producto.getCodigo()%>" style="display: inline;">
+						<form action="/tienda_informatica/usuarios/editar/<%= usuario.getId()%>" style="display: inline;">
 		    				<input type="submit" value="Editar" />
 						</form>
-						<form action="/tienda_informatica/productos/borrar/" method="post" style="display: inline;">
+						<form action="/tienda_informatica/usuarios/borrar/" method="post" style="display: inline;">
 							<input type="hidden" name="__method__" value="delete"/>
-							<input type="hidden" name="codigo" value="<%= producto.getCodigo()%>"/>
+							<input type="hidden" name="id" value="<%= usuario.getId()%>"/>
 		    				<input type="submit" value="Eliminar" />
 						</form>
 					</div>
@@ -90,7 +90,7 @@
 		            }
 		        } else { 
 		    %>
-				No hay registros de producto
+				No hay registros de usuario
 			<% } %>
 			</div>
 		</main>

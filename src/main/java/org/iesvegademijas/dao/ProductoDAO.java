@@ -3,6 +3,7 @@ package org.iesvegademijas.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.iesvegademijas.model.Fabricante;
 import org.iesvegademijas.model.Producto;
 
 public interface ProductoDAO {
@@ -15,5 +16,7 @@ public interface ProductoDAO {
 	public void update(Producto producto);
 	
 	public void delete(int id);
+	public List<Producto> filtrar(String filtro);
 
+	List<Producto> filtrarFulltext(String filtro);
 }

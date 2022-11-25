@@ -1,15 +1,12 @@
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="org.iesvegademijas.model.Producto"%>
-<%@page import="org.iesvegademijas.model.Fabricante"%>
+<%@page import="org.iesvegademijas.model.Usuario"%>
 <%@page import="java.util.Optional"%>
-<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Detalle Producto</title>
+<title>Crear Usuario</title>
 <style>
 .clearfix::after {
 	content: "";
@@ -25,10 +22,10 @@
 	<%@ include file="/WEB-INF/jsp/nav.jspf" %>
 	<main>
 		<div id="contenedora" style="float:none; margin: 0 auto;width: 900px;" >
-			<form action="/tienda_informatica/productos/crear/" method="post">
+			<form action="/tienda_informatica/usuarios/crear/" method="post">
 				<div class="clearfix">
 					<div style="float: left; width: 50%">
-						<h1>Crear Producto</h1>
+						<h1>Crear Usuario</h1>
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
 						
@@ -45,38 +42,26 @@
 				
 				<div style="margin-top: 6px;" class="clearfix">
 					<div style="float: left;width: 50%">
-						Nombre
+						Usuario
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;">
-						<input name="nombre" />
+						<input name="user" />
 					</div> 
 				</div>
-						<div style="margin-top: 6px;" class="clearfix">
+				<div style="margin-top: 6px;" class="clearfix">
 					<div style="float: left;width: 50%">
-						Precio
+						Contraseña
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;">
-						<input name="precio" />
+						<input type="password" name="password" />
 					</div> 
 				</div>
-						<div style="margin-top: 6px;" class="clearfix">
+				<div style="margin-top: 6px;" class="clearfix">
 					<div style="float: left;width: 50%">
-						Codigo_Fab
+						Rol
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;">
-						<select name="codigoFab">
-						<%if (request.getAttribute("listaFabricantes") != null) {
-						List<Fabricante> listaFabricante = (List<Fabricante>)request.getAttribute("listaFabricantes");
-		            
-		            		for (Fabricante fabricante : listaFabricante) { %>
-		            		<option value="<%= fabricante.getCodigo()%>"><%= fabricante.getNombre()%></option>
-		        		<% 
-		            		}
-		        		} else { 
-		  			  %>
-							No hay registros de fabricante
-					<% } %>
-						</select>
+						<input name="rol" />
 					</div> 
 				</div>
 		

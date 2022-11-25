@@ -1,11 +1,10 @@
 package org.iesvegademijas.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
-import static java.util.stream.Collectors.*;
-import static java.util.Comparator.*;
+import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -55,10 +54,12 @@ public class FabricantesServlet extends HttpServlet {
 				return fd;
 
 				
+				
+				
 			}).collect(toList());
 			
 			List<FabricanteDTO> listaOrd = null;
-			if (request.getParameter("orden") != null) {
+			if (request.getParameter("orden") != null && request.getParameter("modo") != null) {
 				if(request.getParameter("orden").equals("ordCod") && request.getParameter("modo").equals("modAsc")) {
 					listaOrd= listaFabDTO.stream().sorted(comparing(FabricanteDTO::getCodigo)).collect(toList());
 				} else if(request.getParameter("orden").equals("ordCod") && request.getParameter("modo").equals("modDesc")) {

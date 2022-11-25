@@ -1,15 +1,12 @@
-<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="org.iesvegademijas.model.Producto"%>
-<%@page import="org.iesvegademijas.model.Fabricante"%>
+<%@page import="org.iesvegademijas.model.Usuario"%>
 <%@page import="java.util.Optional"%>
-<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Detalle Producto</title>
+<title>Detalle Usuario</title>
 <style>
 .clearfix::after {
 	content: "";
@@ -25,16 +22,18 @@
 	<%@ include file="/WEB-INF/jsp/nav.jspf" %>
 	<main>
 		<div id="contenedora" style="float:none; margin: 0 auto;width: 900px;" >
-			<form action="/tienda_informatica/productos/crear/" method="post">
 				<div class="clearfix">
 					<div style="float: left; width: 50%">
-						<h1>Crear Producto</h1>
+						<h1>Detalle Usuario</h1>
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
 						
-						<div style="position: absolute; left: 39%; top : 39%;">								
-							<input type="submit" value="Crear"/>					
-						</div>
+						<div style="position: absolute; left: 39%; top : 39%;">
+							
+								<form action="/tienda_informatica/usuarios" >
+									<input type="submit" value="Volver" />
+								</form>
+							</div>
 						
 					</div>
 				</div>
@@ -43,44 +42,43 @@
 					<hr/>
 				</div>
 				
+				<% 	Optional<Usuario> optUsu = (Optional<Usuario>)request.getAttribute("usuario");
+					if (optUsu.isPresent()) {
+				%>
+				
 				<div style="margin-top: 6px;" class="clearfix">
 					<div style="float: left;width: 50%">
-						Nombre
+						<label>Id</label>
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;">
-						<input name="nombre" />
+						<input value="<%= optUsu.get().getId() %>" readonly="readonly"/>
 					</div> 
 				</div>
-						<div style="margin-top: 6px;" class="clearfix">
+				<div style="margin-top: 6px;" class="clearfix">
 					<div style="float: left;width: 50%">
-						Precio
+						<label>Usuario</label>
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;">
-						<input name="precio" />
+						<input value="<%= optUsu.get().getUser() %>" readonly="readonly"/>
 					</div> 
 				</div>
-						<div style="margin-top: 6px;" class="clearfix">
+				
+				<div style="margin-top: 6px;" class="clearfix">
 					<div style="float: left;width: 50%">
-						Codigo_Fab
+						<label>Rol</label>
 					</div>
 					<div style="float: none;width: auto;overflow: hidden;">
-						<select name="codigoFab">
-						<%if (request.getAttribute("listaFabricantes") != null) {
-						List<Fabricante> listaFabricante = (List<Fabricante>)request.getAttribute("listaFabricantes");
-		            
-		            		for (Fabricante fabricante : listaFabricante) { %>
-		            		<option value="<%= fabricante.getCodigo()%>"><%= fabricante.getNombre()%></option>
-		        		<% 
-		            		}
-		        		} else { 
-		  			  %>
-							No hay registros de fabricante
-					<% } %>
-						</select>
+						<input value="<%= optUsu.get().getRol() %>" readonly="readonly"/>
 					</div> 
 				</div>
-		
-			</form>
+
+				
+				<% 	} else { %>
+					
+						request.sendRedirect("usuarios/");
+				
+				<% 	} %>
+				
 		</div>
 	</main>
 	<%@ include file="/WEB-INF/jsp/footer.jspf" %>

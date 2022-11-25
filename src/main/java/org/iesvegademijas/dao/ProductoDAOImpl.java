@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.iesvegademijas.model.Fabricante;
 import org.iesvegademijas.model.Producto;
 
 public class ProductoDAOImpl extends AbstractDAOImpl implements ProductoDAO{
@@ -122,7 +123,6 @@ public class ProductoDAOImpl extends AbstractDAOImpl implements ProductoDAO{
         	
         	if (rs.next()) {
         		Producto pro = new Producto();
-        		idx = 1;
         		pro.setCodigo(rs.getInt("codigo"));
         		pro.setNombre(rs.getString("nombre"));
         		pro.setPrecio(rs.getDouble("precio"));
@@ -209,6 +209,90 @@ public class ProductoDAOImpl extends AbstractDAOImpl implements ProductoDAO{
         }
 		
 	}
+	@Override
+	public List<Producto> filtrar(String filtro) {
+		Connection conn = null;
+		Statement s = null;
+        ResultSet rs = null;
+        
+        List<Producto> listPro = new ArrayList<>(); 
+        
+        try {
+        	conn = connectDB();
+
+        	// Se utiliza un objeto Statement dado que no hay parámetros en la consulta.
+        	s = conn.createStatement();
+        	String format = "SELECT * FROM producto %s";
+        	
+        	if(filtro != null && !filtro.isEmpty()) {
+        		format = String.format(format, "where nombre like '%"+filtro+"%'");
+        	} else {
+        		format = String.format(format, "");
+        	}
+        	
+        	rs = s.executeQuery(format);          
+            while (rs.next()) {
+            	Producto pro = new Producto();
+            	int idx = 1;
+            	pro.setCodigo(rs.getInt("codigo"));
+            	pro.setNombre(rs.getString("nombre"));
+            	pro.setPrecio(rs.getDouble("precio"));
+            	pro.setCodigoFabricante(rs.getInt("codigo_fabricante"));
+            	listPro.add(pro);
+            }
+          
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+            closeDb(conn, s, rs);
+        }
+        return listPro;
+	}
+	
+	@Override
+	public List<Producto> filtrarFulltext(String filtro) {
+		Connection conn = null;
+		Statement s = null;
+        ResultSet rs = null;
+        
+        List<Producto> listPro = new ArrayList<>(); 
+        
+        try {
+        	conn = connectDB();
+
+        	// Se utiliza un objeto Statement dado que no hay parámetros en la consulta.
+        	s = conn.createStatement();
+        	String format = "SELECT * FROM producto %s";
+        	
+        	if(filtro != null && !filtro.isEmpty()) {
+        		format = String.format(format, "where MATCH(nombre) AGAINST ('"+filtro+"*' in boolean mode)");
+        	} else {
+        		format = String.format(format,"");
+        	}
+        	
+        	rs = s.executeQuery(format);          
+            while (rs.next()) {
+            	Producto pro = new Producto();
+            	int idx = 1;
+            	pro.setCodigo(rs.getInt("codigo"));
+            	pro.setNombre(rs.getString("nombre"));
+            	pro.setPrecio(rs.getDouble("precio"));
+            	pro.setCodigoFabricante(rs.getInt("codigo_fabricante"));
+            	listPro.add(pro);
+            }
+          
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+            closeDb(conn, s, rs);
+        }
+        return listPro;
+	}
+
 	
 	public static void main(String[] args) {
 		ProductoDAO pD = new ProductoDAOImpl();
